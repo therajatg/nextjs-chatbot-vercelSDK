@@ -1,5 +1,3 @@
-//NOT WORKING
-
 import { NextRequest } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
@@ -9,10 +7,6 @@ import { RunnableSequence } from "langchain/schema/runnable";
 
 export const runtime = "edge";
 
-/**
- * Basic memory formatter that stringifies and passes
- * message history directly into the model.
- */
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
@@ -25,12 +19,6 @@ Current conversation:
 User: {input}
 AI:`;
 
-/*
- * This handler initializes and calls a simple chain with a prompt,
- * chat model, and output parser. See the docs for more information:
- *
- * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
- */
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const messages = body.messages ?? [];
@@ -38,20 +26,24 @@ export async function POST(req: NextRequest) {
   const currentMessageContent = messages[messages.length - 1].content;
 
   const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-  /**
-   * See a full list of supported models at:
-   * https://js.langchain.com/docs/modules/model_io/models/
-   */
-  const model = new ChatOpenAI({
-    temperature: 0.8,
-    azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
-    azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
-    azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME,
-    azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
-    azureOpenAIBasePath: process.env.AZURE_OPENAI_BASE_PATH,
-  });
 
-  console.log("model", model);
+  // const model = new ChatOpenAI({
+  //   temperature: 0.8,
+  //   azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+  //   azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+  //   azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME,
+  //   azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+  //   azureOpenAIBasePath: process.env.AZURE_OPENAI_BASE_PATH,
+  // });
+
+  const model = new ChatOpenAI({
+    temperature: 0.9,
+    azureOpenAIApiKey: "2bc42fc853bd46f8b81dfc51b99b23e3",
+    azureOpenAIApiInstanceName: "lucidmvpopenai",
+    azureOpenAIApiDeploymentName: "lucidchatbot",
+    azureOpenAIApiVersion: "2023-03-15-preview",
+    // azureOpenAIBasePath: "https://lucidmvpopenai.openai.azure.com/",
+  });
 
   /**
    * Chat models stream message chunks rather than bytes, so this

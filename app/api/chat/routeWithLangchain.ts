@@ -42,11 +42,6 @@ export async function POST(req: NextRequest) {
    */
   const model = new ChatOpenAI({
     temperature: 0.9,
-    azureOpenAIApiKey: "2bc42fc853bd46f8b81dfc51b99b23e3",
-    azureOpenAIApiInstanceName: "lucidmvpopenai",
-    azureOpenAIApiDeploymentName: "lucidchatbot",
-    azureOpenAIApiVersion: "2023-03-15-preview",
-    azureOpenAIBasePath: "https://lucidmvpopenai.openai.azure.com/",
   });
 
   /**
